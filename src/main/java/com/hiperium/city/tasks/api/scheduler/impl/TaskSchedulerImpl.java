@@ -1,0 +1,89 @@
+package com.hiperium.city.tasks.api.scheduler.impl;
+
+import com.hiperium.city.tasks.api.exception.SchedulerException;
+import com.hiperium.city.tasks.api.exception.ResourceNotFoundException;
+import com.hiperium.city.tasks.api.model.Task;
+import com.hiperium.city.tasks.api.scheduler.TaskScheduler;
+import com.hiperium.city.tasks.api.utils.SchedulerUtil;
+import com.hiperium.city.tasks.api.utils.TaskUtil;
+import com.hiperium.city.tasks.api.utils.enums.EnumResourceError;
+import com.hiperium.city.tasks.api.utils.enums.EnumSchedulerError;
+import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
+@Service
+public class TaskSchedulerImpl implements TaskScheduler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskSchedulerImpl.class);
+
+    @Value("${hiperium.city.tasks.time.zone.id}")
+    private String zoneId;
+
+    private final Scheduler scheduler;
+
+    public TaskSchedulerImpl(Scheduler scheduler) {
+        this.scheduler = scheduler;
+    }
+
+    public void scheduleJob(final Task task) {
+        LOGGER.debug("scheduleJob() - BEGIN: {}", task.getName());
+        task.setJobId(TaskUtil.generateJobId());
+        JobDetail job = SchedulerUtil.createJobDetailFromTask(task);
+        Trigger trigger = SchedulerUtil.createCronTriggerFromTask(task, this.zoneId);
+        try {
+            this.scheduler.scheduleJob(job, trigger);
+        } catch (org.quartz.SchedulerException e) {
+            throw new SchedulerException(e, EnumSchedulerError.SCHEDULE_JOB_ERROR, task.getName());
+        }
+        LOGGER.debug("scheduleJob() - END");
+    }
+
+    public void rescheduleJob(final Task task) {
+        LOGGER.debug("rescheduleJob() - BEGIN: {}", task.getId());
+        Trigger currentTrigger = this.getCurrentTrigger(task);
+        Trigger newTrigger = SchedulerUtil.createCronTriggerFromTask(task, this.zoneId);
+        try {
+            this.scheduler.rescheduleJob(currentTrigger.getKey(), newTrigger);
+        } catch (org.quartz.SchedulerException e) {
+            throw new SchedulerException(e, EnumSchedulerError.RESCHEDULE_JOB_ERROR, task.getId());
+        }
+        LOGGER.debug("rescheduleJob() - END");
+    }
+
+    public void unscheduleJob(final Task task) {
+        LOGGER.debug("unscheduleJob() - BEGIN: {}", task.getId());
+        Trigger currentTrigger = this.getCurrentTrigger(task);
+        try {
+            this.scheduler.unscheduleJob(currentTrigger.getKey());
+        } catch (org.quartz.SchedulerException e) {
+            throw new SchedulerException(e, EnumSchedulerError.UNSCHEDULE_JOB_ERROR, task.getId());
+        }
+        LOGGER.debug("unscheduleJob() - END");
+    }
+
+    private Trigger getCurrentTrigger(final Task task) {
+        LOGGER.debug("getCurrentTrigger() - BEGIN: {}", task.getId());
+        Trigger trigger = null;
+        try {
+            for (JobKey jobKey : this.scheduler.getJobKeys(GroupMatcher.jobGroupEquals(SchedulerUtil.TASK_GROUP_NAME))) {
+                if (jobKey.getName().equals(task.getJobId())) {
+                    TriggerKey triggerKey = TriggerKey.triggerKey(task.getJobId(), SchedulerUtil.TASK_GROUP_NAME);
+                    trigger = this.scheduler.getTrigger(triggerKey);
+                }
+            }
+        } catch (org.quartz.SchedulerException e) {
+            throw new SchedulerException(e, EnumSchedulerError.GET_CURRENT_TRIGGER_ERROR, task.getId());
+        }
+        if (Objects.isNull(trigger)) {
+            throw new ResourceNotFoundException(EnumResourceError.TRIGGER_NOT_FOUND, task.getId());
+        }
+        LOGGER.debug("getTrigger() - END");
+        return trigger;
+    }
+}
