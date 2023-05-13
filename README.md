@@ -1,11 +1,10 @@
 
-## Spring Boot Native microservice with WebFlux, OAuth2, Quartz, DynamoDB and Testcontainers.
+## Spring Boot Native microservice to manage clustered Quartz Jobs.
 
 * **Author**: [Andres Solorzano](https://www.linkedin.com/in/aosolorzano/).
 * **Level**: Advanced.
 * **Technologies**: Java 17, Spring Boot 3, Spring Native, Spring WebFlux, Spring OAuth, Quartz, Flyway, Testcontainers, Postgres, DynamoDB and Docker Compose.
 
----
 
 ## Description.
 This project uses the Spring Boot Framework to manage Quartz Jobs in a Spring Native microservice with the use of reactive programing using Spring WebFlux.

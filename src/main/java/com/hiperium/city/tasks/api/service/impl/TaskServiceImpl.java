@@ -8,6 +8,7 @@ import com.hiperium.city.tasks.api.service.TaskService;
 import com.hiperium.city.tasks.api.utils.enums.EnumResourceError;
 import com.hiperium.city.tasks.api.utils.enums.EnumTaskStatus;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;

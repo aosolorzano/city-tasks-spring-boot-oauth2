@@ -5,9 +5,9 @@ import reactor.core.publisher.Mono;
 
 public interface TaskService {
 
-    Mono<Task> create(final Task task);
+    Mono<Task> create(Task task);
 
-    Mono<Task> update(final Task task);
+    Mono<Task> update(Task task);
 
-    Mono<Task> delete(final Task task);
+    Mono<Task> delete(Task task);
 }

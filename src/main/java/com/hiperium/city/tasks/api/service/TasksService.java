@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux;
 
 public interface TasksService {
 
-    Flux<TaskDto> find(final TaskCriteriaDto task);
+    Flux<TaskDto> find(TaskCriteriaDto task);
 
     Flux<TaskDto> findAll();
 }

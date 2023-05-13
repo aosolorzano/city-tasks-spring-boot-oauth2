@@ -12,7 +12,6 @@ public final class PropertiesLoaderUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesLoaderUtil.class);
     private static final String JDBC_SQL_CONNECTION = "jdbc:postgresql://{0}:{1}/{2}";
-    public static final String POSTGRESQL_DRIVER_NAME = "org.postgresql.Driver";
 
     private PropertiesLoaderUtil() {
         // Private constructor.
@@ -24,17 +23,14 @@ public final class PropertiesLoaderUtil {
             String sqlConnection = MessageFormat.format(JDBC_SQL_CONNECTION, auroraSecretVO.host(),
                     auroraSecretVO.port(), auroraSecretVO.dbname());
             LOGGER.info("JDBC Connection found: {}", sqlConnection);
-            // Set the default JDBC connection.
+            // Set JDBC connection for JPA.
             System.setProperty("spring.datasource.url", sqlConnection);
             System.setProperty("spring.datasource.username", auroraSecretVO.username());
             System.setProperty("spring.datasource.password", auroraSecretVO.password());
-            System.setProperty("spring.datasource.driver-class-name", POSTGRESQL_DRIVER_NAME);
-            // Set the default JDBC connection for Quartz.
-            System.setProperty("spring.scheduler.properties.org.scheduler.dataSource.CityTasksQuartzDS.URL", sqlConnection);
-            System.setProperty("spring.scheduler.properties.org.scheduler.dataSource.CityTasksQuartzDS.user", auroraSecretVO.username());
-            System.setProperty("spring.scheduler.properties.org.scheduler.dataSource.CityTasksQuartzDS.password", auroraSecretVO.password());
-            System.setProperty("spring.scheduler.properties.org.scheduler.dataSource.CityTasksQuartzDS.driver", POSTGRESQL_DRIVER_NAME);
-            System.setProperty("spring.scheduler.properties.org.scheduler.dataSource.CityTasksQuartzDS.provider", "hikaricp");
+            // Set JDBC connection for Quartz.
+            System.setProperty("spring.quartz.properties.org.quartz.dataSource.cityTasksQuartzDS.URL", sqlConnection);
+            System.setProperty("spring.quartz.properties.org.quartz.dataSource.cityTasksQuartzDS.user", auroraSecretVO.username());
+            System.setProperty("spring.quartz.properties.org.quartz.dataSource.cityTasksQuartzDS.password", auroraSecretVO.password());
         }
     }
 

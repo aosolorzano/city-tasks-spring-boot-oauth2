@@ -25,7 +25,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
         this.dynamoDbAsyncClient = dynamoDbAsyncClient;
     }
 
-    public Mono<Boolean> updateStatusByTaskOperation(Task task) {
+    public Mono<Boolean> updateStatusByTaskOperation(final Task task) {
         LOGGER.debug("updateStatusByTaskOperation(): {} - {}", task.getDeviceId(), task.getDeviceOperation());
         return this.findById(task.getDeviceId())
                 .map(device -> {
@@ -41,7 +41,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
                 .map(putItemResponse -> putItemResponse.sdkHttpResponse().isSuccessful());
     }
 
-    public Mono<Device> findById(String id) {
+    public Mono<Device> findById(final String id) {
         LOGGER.debug("findById(): {}", id);
         return Mono.fromFuture(this.dynamoDbAsyncClient.getItem(DeviceUtil.getDeviceRequest(id)))
                 .doOnNext(itemResponse -> {

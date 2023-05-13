@@ -1,14 +1,40 @@
-[
-  {
-    "id": {"S": "123"},
-    "name": {"S": "Device 123"},
-    "description": {"S": "Device 123 description"},
-    "status": {"S": "OFF"}
-  },
-  {
-    "id": {"S": "456"},
-    "name": {"S": "Device 456"},
-    "description": {"S": "Device 456 description"},
-    "status": {"S": "ON"}
-  }
-]
+{
+  "Devices": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "123"
+          },
+          "name": {
+            "S": "Device 123"
+          },
+          "description": {
+            "S": "Device 123 description"
+          },
+          "status": {
+            "S": "OFF"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "456"
+          },
+          "name": {
+            "S": "Device 456"
+          },
+          "description": {
+            "S": "Device 456 description"
+          },
+          "status": {
+            "S": "ON"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -33,15 +33,17 @@ public abstract class AbstractContainerBase {
         registry.add("spring.datasource.password", POSTGRES_CONTAINER::getPassword);
         registry.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
         // SPRING QUARTZ JDBC
-        registry.add("spring.quartz.properties.org.quartz.dataSource.CityTasksQuartzDS.URL", POSTGRES_CONTAINER::getJdbcUrl);
-        registry.add("spring.quartz.properties.org.quartz.dataSource.CityTasksQuartzDS.user", POSTGRES_CONTAINER::getUsername);
-        registry.add("spring.quartz.properties.org.quartz.dataSource.CityTasksQuartzDS.password", POSTGRES_CONTAINER::getPassword);
-        registry.add("spring.quartz.properties.org.quartz.dataSource.CityTasksQuartzDS.driver", () -> "org.postgresql.Driver");
-        registry.add("spring.quartz.properties.org.quartz.dataSource.CityTasksQuartzDS.provider", () -> "hikaricp");
+        registry.add("spring.quartz.properties.org.quartz.dataSource.cityTasksQuartzDS.URL", POSTGRES_CONTAINER::getJdbcUrl);
+        registry.add("spring.quartz.properties.org.quartz.dataSource.cityTasksQuartzDS.user", POSTGRES_CONTAINER::getUsername);
+        registry.add("spring.quartz.properties.org.quartz.dataSource.cityTasksQuartzDS.password", POSTGRES_CONTAINER::getPassword);
+        registry.add("spring.quartz.properties.org.quartz.dataSource.cityTasksQuartzDS.driver", () -> "org.postgresql.Driver");
+        registry.add("spring.quartz.properties.org.quartz.dataSource.cityTasksQuartzDS.provider", () -> "hikaricp");
         // AWS DYNAMODB
         registry.add("aws.region", LOCAL_STACK_CONTAINER::getRegion);
         registry.add("aws.accessKeyId", LOCAL_STACK_CONTAINER::getAccessKey);
         registry.add("aws.secretAccessKey", LOCAL_STACK_CONTAINER::getSecretKey);
-        registry.add("aws.endpoint-override", () -> LOCAL_STACK_CONTAINER.getEndpointOverride(LocalStackContainer.Service.DYNAMODB).toString());
+        registry.add("aws.endpoint-override", () ->
+                LOCAL_STACK_CONTAINER.getEndpointOverride(LocalStackContainer.Service.DYNAMODB)
+                        .toString());
     }
 }

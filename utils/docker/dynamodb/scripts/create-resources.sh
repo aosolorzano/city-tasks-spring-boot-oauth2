@@ -9,8 +9,7 @@ awslocal dynamodb create-table                                \
 echo "DONE!"
 
 echo ""
-echo "PUTTING DEVICE ITEM..."
-awslocal dynamodb put-item                                    \
-    --table-name Devices                                      \
-    --item file:///var/lib/localstack/devices.json
+echo "WRITING DEVICE ITEMS..."
+awslocal dynamodb batch-write-item                            \
+    --request-items file:///var/lib/localstack/devices.json
 echo "DONE!"

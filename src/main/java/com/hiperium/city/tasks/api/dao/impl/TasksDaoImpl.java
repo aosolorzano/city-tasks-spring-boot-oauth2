@@ -27,7 +27,7 @@ public class TasksDaoImpl implements TasksDao {
         this.entityManager = entityManager;
     }
 
-    public List<TaskDto> find(TaskCriteriaDto criteriaDto) {
+    public List<TaskDto> find(final TaskCriteriaDto criteriaDto) {
         LOGGER.debug("find() - START: {}", criteriaDto);
         CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<TaskDto> cq = cb.createQuery(TaskDto.class);
@@ -63,7 +63,7 @@ public class TasksDaoImpl implements TasksDao {
         return this.entityManager.createQuery(cq).getResultList();
     }
 
-    private static void assignQueryPredicates(CriteriaQuery<TaskDto> cq, List<Predicate> predicates) {
+    private static void assignQueryPredicates(final CriteriaQuery<TaskDto> cq, final List<Predicate> predicates) {
         if (predicates.isEmpty()) {
             throw new ValidationException(EnumValidationError.NO_CRITERIA_FOUND);
         } else if (predicates.size() == 1) {
@@ -73,7 +73,7 @@ public class TasksDaoImpl implements TasksDao {
         }
     }
 
-    private static CompoundSelection<TaskDto> getTaskDtoConstruct(CriteriaBuilder cb, Root<Task> taskRoot) {
+    private static CompoundSelection<TaskDto> getTaskDtoConstruct(final CriteriaBuilder cb, final Root<Task> taskRoot) {
         return cb.construct(TaskDto.class, taskRoot.get("id"), taskRoot.get("name"),
                 taskRoot.get("description"), taskRoot.get("status"), taskRoot.get("deviceId"),
                 taskRoot.get("deviceOperation"), taskRoot.get("hour"), taskRoot.get("minute"),

@@ -123,9 +123,7 @@ class TaskControllerTest extends AbstractContainerBase {
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(ErrorDetailsDto.class)
-                .value(errorDetailsDTO -> {
-                    Assertions.assertThat(errorDetailsDTO.getErrorCode())
-                            .isEqualTo(EnumResourceError.TASK_NOT_FOUND.getCode());
-                });
+                .value(errorDetailsDTO -> Assertions.assertThat(errorDetailsDTO.getErrorCode())
+                        .isEqualTo(EnumResourceError.TASK_NOT_FOUND.getCode()));
     }
 }

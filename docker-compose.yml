@@ -17,21 +17,6 @@ services:
     networks:
       - tasks-network
 
-  tasks-pgadmin:
-    image: dpage/pgadmin4
-    container_name: tasks-pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=user@domain.com
-      - PGADMIN_DEFAULT_PASSWORD=admin123
-    volumes:
-      - ./utils/docker/pgadmin:/var/lib/pgadmin
-    ports:
-      - "9000:80"
-    depends_on:
-      - tasks-postgres
-    networks:
-      - tasks-network
-
   tasks-localstack:
     image: localstack/localstack:latest
     container_name: tasks-localstack
@@ -59,7 +44,7 @@ services:
     container_name: city-tasks-spring-boot-oauth2
     build:
       context: .
-      dockerfile: Dockerfile-native
+      dockerfile: Dockerfile
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - HIPERIUM_CITY_TASKS_TIME_ZONE_ID=-05:00
@@ -70,7 +55,6 @@ services:
       - AWS_ENDPOINT_OVERRIDE=http://tasks-localstack:4566
     depends_on:
       - tasks-postgres
-      - tasks-pgadmin
       - tasks-localstack
     ports:
       - "8080:8080"
