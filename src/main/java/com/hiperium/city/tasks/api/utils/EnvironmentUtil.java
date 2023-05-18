@@ -2,7 +2,7 @@ package com.hiperium.city.tasks.api.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hiperium.city.tasks.api.vo.AuroraPostgresSecretVo;
+import com.hiperium.city.tasks.api.vo.AuroraSecretsVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,13 +16,13 @@ public final class EnvironmentUtil {
         // Empty constructor.
     }
 
-    public static AuroraPostgresSecretVo getAuroraSecretVO() throws JsonProcessingException {
+    public static AuroraSecretsVo getAuroraSecretVO() throws JsonProcessingException {
         String auroraSecret = System.getenv("HIPERIUM_CITY_TASKS_DB_CLUSTER_SECRET");
         if (Objects.isNull(auroraSecret) || auroraSecret.isBlank()) {
             LOGGER.warn("HIPERIUM_CITY_TASKS_DB_CLUSTER_SECRET not found. Using defaults.");
             return null;
         }
-        return new ObjectMapper().readValue(auroraSecret, AuroraPostgresSecretVo.class);
+        return new ObjectMapper().readValue(auroraSecret, AuroraSecretsVo.class);
     }
 
     public static String getTimeZoneId() {

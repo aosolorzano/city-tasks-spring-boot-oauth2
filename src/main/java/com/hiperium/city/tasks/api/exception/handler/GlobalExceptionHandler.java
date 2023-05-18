@@ -1,6 +1,10 @@
-package com.hiperium.city.tasks.api.exception;
+package com.hiperium.city.tasks.api.exception.handler;
 
 import com.hiperium.city.tasks.api.dto.ErrorDetailsDto;
+import com.hiperium.city.tasks.api.exception.ApplicationException;
+import com.hiperium.city.tasks.api.exception.ResourceNotFoundException;
+import com.hiperium.city.tasks.api.exception.TaskSchedulerException;
+import com.hiperium.city.tasks.api.exception.ValidationException;
 import com.hiperium.city.tasks.api.utils.ErrorUtil;
 import com.hiperium.city.tasks.api.utils.enums.EnumValidationError;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +36,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         this.messageSource = messageSource;
     }
 
+    @ExceptionHandler(ValidationException.class)
+    public final Mono<ResponseEntity<ErrorDetailsDto>> handleValidationException(
+            ValidationException exception,
+            ServerWebExchange exchange) {
+        ErrorDetailsDto errorDetails = this.constructErrorDetailsDTO(exchange, exception);
+        super.logger.error("handleValidationException(): " + errorDetails);
+        return Mono.just(new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST));
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public final Mono<ResponseEntity<ErrorDetailsDto>> handleResourceNotFoundException(
             ResourceNotFoundException exception,
@@ -41,13 +54,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return Mono.just(new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND));
     }
 
-    @ExceptionHandler(SchedulerException.class)
+    @ExceptionHandler(TaskSchedulerException.class)
     public final Mono<ResponseEntity<ErrorDetailsDto>> handleQuartzException(
-            SchedulerException exception,
+            TaskSchedulerException exception,
             ServerWebExchange exchange) {
         ErrorDetailsDto errorDetails = this.constructErrorDetailsDTO(exchange, exception);
         super.logger.error("handleQuartzException(): " + errorDetails);
         return Mono.just(new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
+    @ExceptionHandler(ApplicationException.class)
+    public final Mono<ResponseEntity<ErrorDetailsDto>> handleApplicationException(
+            ApplicationException exception,
+            ServerWebExchange exchange) {
+        ErrorDetailsDto errorDetails = this.constructErrorDetailsDTO(exchange, exception);
+        super.logger.error("handleApplicationException(): " + errorDetails);
+        return Mono.just(new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST));
     }
 
     @Override

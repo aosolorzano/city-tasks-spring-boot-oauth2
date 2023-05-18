@@ -3,6 +3,7 @@ package com.hiperium.city.tasks.api.controller;
 import com.hiperium.city.tasks.api.dto.TaskCriteriaDto;
 import com.hiperium.city.tasks.api.dto.TaskDto;
 import com.hiperium.city.tasks.api.service.TasksService;
+import com.hiperium.city.tasks.api.utils.BeanValidationUtil;
 import com.hiperium.city.tasks.api.utils.TaskUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ public class TasksController {
     @ResponseStatus(HttpStatus.OK)
     public Flux<TaskDto> find(@RequestBody TaskCriteriaDto criteriaDto) {
         LOGGER.debug("find() - START: {}", criteriaDto);
+        BeanValidationUtil.validateBean(criteriaDto);
         return this.tasksService.find(criteriaDto);
     }
 

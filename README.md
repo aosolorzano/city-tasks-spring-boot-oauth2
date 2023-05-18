@@ -14,13 +14,13 @@ To perform these activities, the users must be logged into the OIDC Service that
 All test cases using the TDD methodology from the beginning of the development phase, and only Integration Tests are executed with the support of Testcontainers because Unit Testing does not cover real world scenarios.
 This project also uses Docker Compose to deploy a local cluster alongside the other required services by the Spring Boot application.
 
-## Running the application using Docker Compose.
+## Running using Docker Compose.
 Only need to execute the following command from the project's root folder:
 ```bash
 docker compose up --build
 ```
 
-### Getting Device items from DynamoDB on LocalStack container.
+### Getting Device items from DynamoDB on LocalStack.
 Execute the following command:
 ```bash
 aws dynamodb scan         \
@@ -28,7 +28,7 @@ aws dynamodb scan         \
   --endpoint-url http://localhost:4566
 ```
 
-## Running the application using the Native Executable only.
+## Running using the Native Executable.
 Use this option if you want to explore more features such as running your tests in a native image.
 *IMPORTANT:* The GraalVM `native-image` compiler should be installed and configured on your machine.
 

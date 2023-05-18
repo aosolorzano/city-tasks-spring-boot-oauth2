@@ -20,15 +20,15 @@ public class ApplicationException extends RuntimeException {
         this.args = args;
     }
 
-    protected String getErrorCode() {
+    public String getErrorCode() {
         return errorCode;
     }
 
-    protected String getErrorMessageKey() {
+    public String getErrorMessageKey() {
         return errorMessageKey;
     }
 
-    protected Object[] getArgs() {
+    public Object[] getArgs() {
         return args;
     }
 }

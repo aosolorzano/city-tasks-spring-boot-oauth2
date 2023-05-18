@@ -1,29 +1,34 @@
 package com.hiperium.city.tasks.api.controller;
 
-import com.hiperium.city.tasks.api.common.AbstractContainerBase;
+import com.hiperium.city.tasks.api.common.AuthContainers;
 import com.hiperium.city.tasks.api.dto.ErrorDetailsDto;
 import com.hiperium.city.tasks.api.dto.TaskOperationDto;
 import com.hiperium.city.tasks.api.utils.TaskUtil;
-import com.hiperium.city.tasks.api.utils.enums.EnumTaskOperation;
 import com.hiperium.city.tasks.api.utils.enums.EnumLanguageCode;
 import com.hiperium.city.tasks.api.utils.enums.EnumResourceError;
+import com.hiperium.city.tasks.api.utils.enums.EnumTaskOperation;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+@ActiveProfiles("test")
 @TestInstance(PER_CLASS)
 @AutoConfigureWebTestClient
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TaskControllerExceptionsTest extends AbstractContainerBase {
+class TaskControllerExceptionsTest extends AuthContainers {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -36,7 +41,7 @@ class TaskControllerExceptionsTest extends AbstractContainerBase {
     }
 
     @Test
-    @DisplayName("Update Tasks that does not exist")
+    @DisplayName("Update Task that does not exist")
     void givenNotExistingTasksId_whenUpdateTask_thenReturnError404() {
         taskOperationDto.setOperation(EnumTaskOperation.UPDATE);
         taskOperationDto.getTask().setId(201L);
@@ -44,6 +49,7 @@ class TaskControllerExceptionsTest extends AbstractContainerBase {
                 .post()
                 .uri(TaskUtil.TASK_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(taskOperationDto)
                 .exchange()
                 .expectStatus().isNotFound()
@@ -57,7 +63,7 @@ class TaskControllerExceptionsTest extends AbstractContainerBase {
     }
 
     @Test
-    @DisplayName("Update Tasks that does not exist - Spanish")
+    @DisplayName("Update Task that does not exist - Spanish")
     void givenNotExistingTasksId_whenUpdateTask_thenReturnError404InSpanish() {
         taskOperationDto.setOperation(EnumTaskOperation.UPDATE);
         taskOperationDto.getTask().setId(202L);
@@ -66,6 +72,7 @@ class TaskControllerExceptionsTest extends AbstractContainerBase {
                 .uri(TaskUtil.TASK_PATH)
                 .header(HttpHeaders.ACCEPT_LANGUAGE, EnumLanguageCode.ES.getCode())
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(taskOperationDto)
                 .exchange()
                 .expectStatus().isNotFound()
@@ -87,6 +94,7 @@ class TaskControllerExceptionsTest extends AbstractContainerBase {
                 .post()
                 .uri(TaskUtil.TASK_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(taskOperationDto)
                 .exchange()
                 .expectStatus().isNotFound()
@@ -109,6 +117,7 @@ class TaskControllerExceptionsTest extends AbstractContainerBase {
                 .uri(TaskUtil.TASK_PATH)
                 .header(HttpHeaders.ACCEPT_LANGUAGE, EnumLanguageCode.ES.getCode())
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(taskOperationDto)
                 .exchange()
                 .expectStatus().isNotFound()

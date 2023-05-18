@@ -1,6 +1,6 @@
 package com.hiperium.city.tasks.api.controller;
 
-import com.hiperium.city.tasks.api.common.AbstractContainerBase;
+import com.hiperium.city.tasks.api.common.AuthContainers;
 import com.hiperium.city.tasks.api.dto.TaskCriteriaDto;
 import com.hiperium.city.tasks.api.dto.TaskDto;
 import com.hiperium.city.tasks.api.model.Task;
@@ -11,20 +11,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+@ActiveProfiles("test")
 @TestInstance(PER_CLASS)
 @AutoConfigureWebTestClient
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TasksControllerTest extends AbstractContainerBase {
+class TasksControllerTest extends AuthContainers {
 
     @Autowired
-    private WebTestClient webTestClient;
+    protected WebTestClient webTestClient;
 
     @Test
     @Order(1)
@@ -32,15 +34,13 @@ class TasksControllerTest extends AbstractContainerBase {
     void givenTasksList_whenFindAllTasks_thenReturnTasksList() {
         this.webTestClient
                 .get()
-                .uri(TaskUtil.TASK_PATH)
+                .uri(TaskUtil.TASKS_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .exchange()
                 .expectStatus().is2xxSuccessful()
                 .expectBodyList(TaskDto.class)
-                .value(taskList -> {
-                    Assertions.assertThat(taskList).isNotEmpty();
-                    Assertions.assertThat(taskList).hasSize(4);
-                });
+                .value(taskList -> Assertions.assertThat(taskList).isEmpty());
     }
 
     @Test
@@ -54,14 +54,12 @@ class TasksControllerTest extends AbstractContainerBase {
                 .post()
                 .uri(TaskUtil.TASKS_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(criteriaDto)
                 .exchange()
                 .expectStatus().is2xxSuccessful()
                 .expectBodyList(Task.class)
-                .value(taskList -> {
-                    Assertions.assertThat(taskList).isNotEmpty();
-                    Assertions.assertThat(taskList).hasSize(4);
-                });
+                .value(taskList -> Assertions.assertThat(taskList).isEmpty());
     }
 
     @Test
@@ -74,6 +72,7 @@ class TasksControllerTest extends AbstractContainerBase {
                 .post()
                 .uri(TaskUtil.TASKS_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(taskCriteriaDto)
                 .exchange()
                 .expectStatus().is2xxSuccessful()

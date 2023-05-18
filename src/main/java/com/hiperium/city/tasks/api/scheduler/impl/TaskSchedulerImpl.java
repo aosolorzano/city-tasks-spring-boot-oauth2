@@ -1,6 +1,6 @@
 package com.hiperium.city.tasks.api.scheduler.impl;
 
-import com.hiperium.city.tasks.api.exception.SchedulerException;
+import com.hiperium.city.tasks.api.exception.TaskSchedulerException;
 import com.hiperium.city.tasks.api.exception.ResourceNotFoundException;
 import com.hiperium.city.tasks.api.model.Task;
 import com.hiperium.city.tasks.api.scheduler.TaskScheduler;
@@ -38,8 +38,8 @@ public class TaskSchedulerImpl implements TaskScheduler {
         Trigger trigger = SchedulerUtil.createCronTriggerFromTask(task, this.zoneId);
         try {
             this.scheduler.scheduleJob(job, trigger);
-        } catch (org.quartz.SchedulerException e) {
-            throw new SchedulerException(e, EnumSchedulerError.SCHEDULE_JOB_ERROR, task.getName());
+        } catch (SchedulerException e) {
+            throw new TaskSchedulerException(e, EnumSchedulerError.SCHEDULE_JOB_ERROR, task.getName());
         }
         LOGGER.debug("scheduleJob() - END");
     }
@@ -50,8 +50,8 @@ public class TaskSchedulerImpl implements TaskScheduler {
         Trigger newTrigger = SchedulerUtil.createCronTriggerFromTask(task, this.zoneId);
         try {
             this.scheduler.rescheduleJob(currentTrigger.getKey(), newTrigger);
-        } catch (org.quartz.SchedulerException e) {
-            throw new SchedulerException(e, EnumSchedulerError.RESCHEDULE_JOB_ERROR, task.getId());
+        } catch (SchedulerException e) {
+            throw new TaskSchedulerException(e, EnumSchedulerError.RESCHEDULE_JOB_ERROR, task.getId());
         }
         LOGGER.debug("rescheduleJob() - END");
     }
@@ -61,8 +61,8 @@ public class TaskSchedulerImpl implements TaskScheduler {
         Trigger currentTrigger = this.getCurrentTrigger(task);
         try {
             this.scheduler.unscheduleJob(currentTrigger.getKey());
-        } catch (org.quartz.SchedulerException e) {
-            throw new SchedulerException(e, EnumSchedulerError.UNSCHEDULE_JOB_ERROR, task.getId());
+        } catch (SchedulerException e) {
+            throw new TaskSchedulerException(e, EnumSchedulerError.UNSCHEDULE_JOB_ERROR, task.getId());
         }
         LOGGER.debug("unscheduleJob() - END");
     }
@@ -77,8 +77,8 @@ public class TaskSchedulerImpl implements TaskScheduler {
                     trigger = this.scheduler.getTrigger(triggerKey);
                 }
             }
-        } catch (org.quartz.SchedulerException e) {
-            throw new SchedulerException(e, EnumSchedulerError.GET_CURRENT_TRIGGER_ERROR, task.getId());
+        } catch (SchedulerException e) {
+            throw new TaskSchedulerException(e, EnumSchedulerError.GET_CURRENT_TRIGGER_ERROR, task.getId());
         }
         if (Objects.isNull(trigger)) {
             throw new ResourceNotFoundException(EnumResourceError.TRIGGER_NOT_FOUND, task.getId());

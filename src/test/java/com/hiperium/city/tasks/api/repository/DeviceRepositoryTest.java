@@ -1,6 +1,6 @@
 package com.hiperium.city.tasks.api.repository;
 
-import com.hiperium.city.tasks.api.common.AbstractContainerBase;
+import com.hiperium.city.tasks.api.common.StorageContainers;
 import com.hiperium.city.tasks.api.exception.ResourceNotFoundException;
 import com.hiperium.city.tasks.api.model.Device;
 import com.hiperium.city.tasks.api.model.Task;
@@ -12,6 +12,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import reactor.core.publisher.Mono;
@@ -29,11 +30,12 @@ import java.net.URI;
 
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+@ActiveProfiles("test")
 @TestInstance(PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class DeviceRepositoryTest extends AbstractContainerBase {
+class DeviceRepositoryTest extends StorageContainers {
 
     public static final String DEVICE_ID = "123";
 
@@ -48,13 +50,13 @@ class DeviceRepositoryTest extends AbstractContainerBase {
     @BeforeAll
     public static void init() {
         try (DynamoDbClient ddb = DynamoDbClient.builder()
-                .endpointOverride(URI.create(LOCAL_STACK_CONTAINER.getEndpointOverride(LocalStackContainer.Service.DYNAMODB).toString()))
+                .endpointOverride(URI.create(LOCALSTACK_CONTAINER.getEndpointOverride(LocalStackContainer.Service.DYNAMODB).toString()))
                 .credentialsProvider(
                         StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(LOCAL_STACK_CONTAINER.getAccessKey(), LOCAL_STACK_CONTAINER.getSecretKey())
+                                AwsBasicCredentials.create(LOCALSTACK_CONTAINER.getAccessKey(), LOCALSTACK_CONTAINER.getSecretKey())
                         )
                 )
-                .region(Region.of(LOCAL_STACK_CONTAINER.getRegion()))
+                .region(Region.of(LOCALSTACK_CONTAINER.getRegion()))
                 .build()) {
 
             DynamoDbWaiter dbWaiter = ddb.waiter();

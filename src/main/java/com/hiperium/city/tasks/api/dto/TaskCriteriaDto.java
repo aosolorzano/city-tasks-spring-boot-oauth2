@@ -32,6 +32,6 @@ public class TaskCriteriaDto {
     @Max(value = 59, message = "validation.task.minute.Max.message")
     private Integer minute;
 
-    @Length(min = 3, max = 3, message = "The execution day must have 3 characters")
+    @Length(min = 3, max = 3, message = "validation.task.executionDay.length.message")
     private String executionDay;
 }

@@ -1,6 +1,6 @@
 package com.hiperium.city.tasks.api.service;
 
-import com.hiperium.city.tasks.api.common.AbstractContainerBase;
+import com.hiperium.city.tasks.api.common.StorageContainers;
 import com.hiperium.city.tasks.api.exception.ResourceNotFoundException;
 import com.hiperium.city.tasks.api.model.Task;
 import com.hiperium.city.tasks.api.utils.TaskUtil;
@@ -11,17 +11,19 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+@ActiveProfiles("test")
 @TestInstance(PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TaskServiceTest extends AbstractContainerBase {
+class TaskServiceTest extends StorageContainers {
 
     private static final String DEVICE_ID = "123";
 

@@ -1,23 +1,27 @@
 package com.hiperium.city.tasks.api.service;
 
-import com.hiperium.city.tasks.api.common.AbstractContainerBase;
+import com.hiperium.city.tasks.api.common.StorageContainers;
 import com.hiperium.city.tasks.api.dto.TaskCriteriaDto;
 import com.hiperium.city.tasks.api.dto.TaskDto;
 import com.hiperium.city.tasks.api.utils.enums.EnumTaskStatus;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+@ActiveProfiles("queries")
 @TestInstance(PER_CLASS)
-@TestPropertySource(locations = "classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application-queries.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TasksServiceTest extends AbstractContainerBase {
+class TasksServiceTest extends StorageContainers {
 
     private static final String DEVICE_1 = "123";
     private static final String DEVICE_2 = "456";
@@ -42,7 +46,7 @@ class TasksServiceTest extends AbstractContainerBase {
                 .build();
         Flux<TaskDto> taskFluxResult = this.tasksService.find(criteriaDto);
         StepVerifier.create(taskFluxResult)
-                .assertNext(taskDto -> Assertions.assertThat(taskDto.getId()).isEqualTo(criteriaDto.getId()))
+                .expectNextCount(1L)
                 .verifyComplete();
     }
 

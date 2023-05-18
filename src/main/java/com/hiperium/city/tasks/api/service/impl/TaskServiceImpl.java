@@ -2,13 +2,12 @@ package com.hiperium.city.tasks.api.service.impl;
 
 import com.hiperium.city.tasks.api.exception.ResourceNotFoundException;
 import com.hiperium.city.tasks.api.model.Task;
-import com.hiperium.city.tasks.api.scheduler.TaskScheduler;
 import com.hiperium.city.tasks.api.repository.TaskRepository;
+import com.hiperium.city.tasks.api.scheduler.TaskScheduler;
 import com.hiperium.city.tasks.api.service.TaskService;
 import com.hiperium.city.tasks.api.utils.enums.EnumResourceError;
 import com.hiperium.city.tasks.api.utils.enums.EnumTaskStatus;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -36,11 +35,13 @@ public class TaskServiceImpl implements TaskService {
                 .map(this.taskRepository::save);
     }
 
-    public Mono<Task> update(final Task task) {
-        return this.findById(task)
+    public Mono<Task> update(final Task modifiedTask) {
+        return this.findById(modifiedTask)
+                .doOnNext(actualTask -> modifiedTask.setJobId(actualTask.getJobId()))
+                .doOnNext(actualTask -> modifiedTask.setCreatedAt(actualTask.getCreatedAt()))
+                .doOnNext(actualTask -> BeanUtils.copyProperties(modifiedTask, actualTask))
                 .doOnNext(this.taskScheduler::rescheduleJob)
-                .doOnNext(scheduledTask -> BeanUtils.copyProperties(task, scheduledTask))
-                .doOnNext(scheduledTask -> scheduledTask.setUpdatedAt(ZonedDateTime.now()))
+                .doOnNext(actualTask -> actualTask.setUpdatedAt(ZonedDateTime.now()))
                 .map(this.taskRepository::save);
     }
 

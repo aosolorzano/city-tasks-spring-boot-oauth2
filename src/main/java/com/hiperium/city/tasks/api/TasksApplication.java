@@ -1,13 +1,13 @@
 package com.hiperium.city.tasks.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.hiperium.city.tasks.api.config.hints.MessagesRuntimeHints;
-import com.hiperium.city.tasks.api.config.hints.PostgresRuntimeHints;
-import com.hiperium.city.tasks.api.config.hints.QuartzRuntimeHints;
+import com.hiperium.city.tasks.api.config.hints.ResourceBundleHints;
+import com.hiperium.city.tasks.api.config.hints.PostgresHints;
+import com.hiperium.city.tasks.api.config.hints.QuartzHints;
 import com.hiperium.city.tasks.api.dto.ErrorDetailsDto;
 import com.hiperium.city.tasks.api.scheduler.execution.JobExecution;
 import com.hiperium.city.tasks.api.utils.PropertiesLoaderUtil;
-import com.hiperium.city.tasks.api.vo.AuroraPostgresSecretVo;
+import com.hiperium.city.tasks.api.vo.AuroraSecretsVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
@@ -21,8 +21,8 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import java.nio.charset.StandardCharsets;
 
 @SpringBootApplication
-@ImportRuntimeHints({PostgresRuntimeHints.class, QuartzRuntimeHints.class, MessagesRuntimeHints.class})
-@RegisterReflectionForBinding({AuroraPostgresSecretVo.class, JobExecution.class, ErrorDetailsDto.class})
+@ImportRuntimeHints({PostgresHints.class, QuartzHints.class, ResourceBundleHints.class})
+@RegisterReflectionForBinding({AuroraSecretsVo.class, JobExecution.class, ErrorDetailsDto.class})
 public class TasksApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TasksApplication.class);

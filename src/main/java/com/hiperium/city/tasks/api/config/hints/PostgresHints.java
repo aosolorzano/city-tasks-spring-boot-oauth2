@@ -1,13 +1,14 @@
 package com.hiperium.city.tasks.api.config.hints;
 
+import org.postgresql.util.PGobject;
+import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
-public class MessagesRuntimeHints implements RuntimeHintsRegistrar {
+public class PostgresHints implements RuntimeHintsRegistrar {
 
     @Override
     public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-        hints.resources().registerPattern("messages.properties");
-        hints.resources().registerPattern("messages_es.properties");
+        hints.reflection().registerType(PGobject.class, MemberCategory.values());
     }
 }

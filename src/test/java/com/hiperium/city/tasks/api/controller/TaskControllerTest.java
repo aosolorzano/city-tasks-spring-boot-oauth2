@@ -1,6 +1,6 @@
 package com.hiperium.city.tasks.api.controller;
 
-import com.hiperium.city.tasks.api.common.AbstractContainerBase;
+import com.hiperium.city.tasks.api.common.AuthContainers;
 import com.hiperium.city.tasks.api.dto.ErrorDetailsDto;
 import com.hiperium.city.tasks.api.dto.TaskDto;
 import com.hiperium.city.tasks.api.dto.TaskOperationDto;
@@ -15,18 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+@ActiveProfiles("test")
 @TestInstance(PER_CLASS)
 @AutoConfigureWebTestClient
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TaskControllerTest extends AbstractContainerBase {
+class TaskControllerTest extends AuthContainers {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -47,6 +49,7 @@ class TaskControllerTest extends AbstractContainerBase {
                 .post()
                 .uri(TaskUtil.TASK_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(taskOperationDto)
                 .exchange()
                 .expectStatus().isOk()
@@ -80,6 +83,7 @@ class TaskControllerTest extends AbstractContainerBase {
                 .post()
                 .uri(TaskUtil.TASK_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(taskOperationDto)
                 .exchange()
                 .expectStatus().isOk()
@@ -105,6 +109,7 @@ class TaskControllerTest extends AbstractContainerBase {
                 .post()
                 .uri(TaskUtil.TASK_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(taskOperationDto)
                 .exchange()
                 .expectStatus().isOk();
@@ -119,6 +124,7 @@ class TaskControllerTest extends AbstractContainerBase {
                 .post()
                 .uri(TaskUtil.TASK_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, super.getBearerAccessToken())
                 .bodyValue(taskOperationDto)
                 .exchange()
                 .expectStatus().isNotFound()

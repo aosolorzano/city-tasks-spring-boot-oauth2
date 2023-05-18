@@ -1,7 +1,7 @@
 package com.hiperium.city.tasks.api.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.hiperium.city.tasks.api.vo.AuroraPostgresSecretVo;
+import com.hiperium.city.tasks.api.vo.AuroraSecretsVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ public final class PropertiesLoaderUtil {
     }
 
     public static void settingJdbcConnection() throws JsonProcessingException {
-        AuroraPostgresSecretVo auroraSecretVO = EnvironmentUtil.getAuroraSecretVO();
+        AuroraSecretsVo auroraSecretVO = EnvironmentUtil.getAuroraSecretVO();
         if (Objects.nonNull(auroraSecretVO)) {
             String sqlConnection = MessageFormat.format(JDBC_SQL_CONNECTION, auroraSecretVO.host(),
                     auroraSecretVO.port(), auroraSecretVO.dbname());
