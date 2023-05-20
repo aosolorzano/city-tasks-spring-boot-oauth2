@@ -1,5 +1,5 @@
 
-## Spring Boot Native microservice to manage clustered Quartz Jobs.
+## Spring Boot Native/Reactive Microservice with OAuth2 and Quartz.
 
 * **Author**: [Andres Solorzano](https://www.linkedin.com/in/aosolorzano/).
 * **Level**: Advanced.
@@ -57,16 +57,16 @@ $ ./mvnw clean native:compile -Pnative spring-boot:run
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.0.6/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.0.6/maven-plugin/reference/html/#build-image)
-* [GraalVM Native Image Support](https://docs.spring.io/spring-boot/docs/3.0.6/reference/html/native-image.html#native-image)
+* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.1.0/maven-plugin/reference/html/)
+* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.1.0/maven-plugin/reference/html/#build-image)
+* [GraalVM Native Image Support](https://docs.spring.io/spring-boot/docs/3.1.0/reference/html/native-image.html#native-image)
 * [Testcontainers](https://www.testcontainers.org/)
 * [Testcontainers Postgres Module Reference Guide](https://www.testcontainers.org/modules/databases/postgres/)
-* [Spring Reactive Web](https://docs.spring.io/spring-boot/docs/3.0.6/reference/htmlsingle/#web.reactive)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/3.0.6/reference/htmlsingle/#data.sql.jpa-and-spring-data)
-* [OAuth2 Client](https://docs.spring.io/spring-boot/docs/3.0.6/reference/htmlsingle/#web.security.oauth2.client)
-* [Quartz Scheduler](https://docs.spring.io/spring-boot/docs/3.0.6/reference/htmlsingle/#io.quartz)
-* [Flyway Migration](https://docs.spring.io/spring-boot/docs/3.0.6/reference/htmlsingle/#howto.data-initialization.migration-tool.flyway)
+* [Spring Reactive Web](https://docs.spring.io/spring-boot/docs/3.1.0/reference/htmlsingle/#web.reactive)
+* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/3.1.0/reference/htmlsingle/#data.sql.jpa-and-spring-data)
+* [OAuth2 Resource Server](https://docs.spring.io/spring-security/reference/reactive/oauth2/resource-server/)
+* [Quartz Scheduler](https://docs.spring.io/spring-boot/docs/3.1.0/reference/htmlsingle/#io.quartz)
+* [Flyway Migration](https://docs.spring.io/spring-boot/docs/3.1.0/reference/htmlsingle/#howto.data-initialization.migration-tool.flyway)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
@@ -78,7 +78,7 @@ The following guides illustrate how to use some features concretely:
 ### Additional Links
 These additional references should also help you:
 
-* [Configure AOT settings in Build Plugin](https://docs.spring.io/spring-boot/docs/3.0.6/maven-plugin/reference/htmlsingle/#aot)
+* [Configure AOT settings in Build Plugin](https://docs.spring.io/spring-boot/docs/3.1.0/maven-plugin/reference/htmlsingle/#aot)
 
 
 ## GraalVM Native Support

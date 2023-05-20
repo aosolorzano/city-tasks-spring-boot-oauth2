@@ -38,7 +38,7 @@ class OAuth2Test extends AbstractContainerBaseTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(taskOperationDto)
                 .exchange()
-                .expectStatus().isUnauthorized();
+                .expectStatus().isForbidden();  // Because the security control for CSRF attacks enable by default.
     }
 
     @Test
