@@ -17,7 +17,7 @@ public final class PropertiesLoaderUtil {
         // Private constructor.
     }
 
-    public static void settingJdbcConnection() throws JsonProcessingException {
+    public static void setJdbcConnection() throws JsonProcessingException {
         AuroraSecretsVo auroraSecretVO = EnvironmentUtil.getAuroraSecretVO();
         if (Objects.nonNull(auroraSecretVO)) {
             String sqlConnection = MessageFormat.format(JDBC_SQL_CONNECTION, auroraSecretVO.host(),
@@ -34,15 +34,33 @@ public final class PropertiesLoaderUtil {
         }
     }
 
-    public static void settingDefaultTimeZone() {
-        String timeZoneId = EnvironmentUtil.getTimeZoneId();
-        if (Objects.nonNull(timeZoneId)) {
-            LOGGER.info("Time Zone ID found: {}", timeZoneId);
-            System.setProperty("hiperium.city.tasks.time.zone.id", timeZoneId);
+    public static void setIdpServiceEndpoint() {
+        String idpEndpoint = EnvironmentUtil.getIdpEndpoint();
+        if (Objects.nonNull(idpEndpoint)) {
+            LOGGER.info("IdP URI: {}", idpEndpoint);
+            System.setProperty("spring.security.oauth2.resourceserver.jwt.issuer-uri", idpEndpoint);
         }
     }
 
-    public static void settingAwsRegion() {
+    public static void setApplicationTimeZone() {
+        String timeZoneId = EnvironmentUtil.getTimeZoneId();
+        if (Objects.nonNull(timeZoneId)) {
+            LOGGER.info("Time Zone ID found: {}", timeZoneId);
+            System.setProperty("city.tasks.time.zone.id", timeZoneId);
+        }
+    }
+
+    public static void setAwsCredentials() {
+        String awsAccessKey = EnvironmentUtil.getAwsAccessKey();
+        if (Objects.nonNull(awsAccessKey)) {
+            LOGGER.info("AWS Access Key found: {}", awsAccessKey);
+            System.setProperty("aws.accessKeyId", awsAccessKey);
+        }
+        String awsSecretKey = EnvironmentUtil.getAwsSecretKey();
+        if (Objects.nonNull(awsSecretKey)) {
+            LOGGER.info("AWS Secret Key found: {}", awsSecretKey);
+            System.setProperty("aws.secretKey", awsSecretKey);
+        }
         String awsRegion = EnvironmentUtil.getAwsRegion();
         if (Objects.nonNull(awsRegion)) {
             LOGGER.info("AWS Region found: {}", awsRegion);
@@ -50,23 +68,7 @@ public final class PropertiesLoaderUtil {
         }
     }
 
-    public static void settingAwsAccessKey() {
-        String awsAccessKey = EnvironmentUtil.getAwsAccessKey();
-        if (Objects.nonNull(awsAccessKey)) {
-            LOGGER.info("AWS Access Key found: {}", awsAccessKey);
-            System.setProperty("aws.accessKeyId", awsAccessKey);
-        }
-    }
-
-    public static void settingAwsSecretKey() {
-        String awsSecretKey = EnvironmentUtil.getAwsSecretKey();
-        if (Objects.nonNull(awsSecretKey)) {
-            LOGGER.info("AWS Secret Key found: {}", awsSecretKey);
-            System.setProperty("aws.secretKey", awsSecretKey);
-        }
-    }
-
-    public static void settingAwsEndpointOverride() {
+    public static void setAwsEndpointOverride() {
         String endpointOverride = EnvironmentUtil.getAwsEndpointOverride();
         if (Objects.nonNull(endpointOverride)) {
             LOGGER.info("AWS Endpoint-Override found: {}", endpointOverride);

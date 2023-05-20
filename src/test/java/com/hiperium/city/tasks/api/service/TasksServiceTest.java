@@ -1,10 +1,9 @@
 package com.hiperium.city.tasks.api.service;
 
-import com.hiperium.city.tasks.api.common.StorageContainers;
+import com.hiperium.city.tasks.api.common.AbstractContainerBaseTest;
 import com.hiperium.city.tasks.api.dto.TaskCriteriaDto;
 import com.hiperium.city.tasks.api.dto.TaskDto;
 import com.hiperium.city.tasks.api.utils.enums.EnumTaskStatus;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 @TestInstance(PER_CLASS)
 @TestPropertySource(locations = "classpath:application-queries.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TasksServiceTest extends StorageContainers {
+class TasksServiceTest extends AbstractContainerBaseTest {
 
     private static final String DEVICE_1 = "123";
     private static final String DEVICE_2 = "456";

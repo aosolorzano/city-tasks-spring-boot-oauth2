@@ -22,7 +22,7 @@ public class TaskSchedulerImpl implements TaskScheduler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskSchedulerImpl.class);
 
-    @Value("${hiperium.city.tasks.time.zone.id}")
+    @Value("${city.tasks.time.zone.id}")
     private String zoneId;
 
     private final Scheduler scheduler;

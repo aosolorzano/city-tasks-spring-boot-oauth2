@@ -6,6 +6,13 @@ public class ApplicationException extends RuntimeException {
     private final String errorMessageKey;
     private final transient Object[] args;
 
+    public ApplicationException(String message) {
+        super(message);
+        this.errorCode = null;
+        this.errorMessageKey = null;
+        this.args = null;
+    }
+
     protected ApplicationException(String errorCode, String errorMessageKey, Object... args) {
         super();
         this.errorCode = errorCode;

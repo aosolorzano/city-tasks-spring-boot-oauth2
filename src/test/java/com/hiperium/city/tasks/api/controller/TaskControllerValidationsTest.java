@@ -1,6 +1,6 @@
 package com.hiperium.city.tasks.api.controller;
 
-import com.hiperium.city.tasks.api.common.AuthContainers;
+import com.hiperium.city.tasks.api.common.AbstractContainerBaseTest;
 import com.hiperium.city.tasks.api.dto.ErrorDetailsDto;
 import com.hiperium.city.tasks.api.dto.TaskOperationDto;
 import com.hiperium.city.tasks.api.utils.TaskUtil;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 @AutoConfigureWebTestClient
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TaskControllerValidationsTest extends AuthContainers {
+class TaskControllerValidationsTest extends AbstractContainerBaseTest {
 
     @Autowired
     private WebTestClient webTestClient;

@@ -2,6 +2,9 @@ package com.hiperium.city.tasks.api.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hiperium.city.tasks.api.exception.ApplicationException;
+import com.hiperium.city.tasks.api.exception.ValidationException;
+import com.hiperium.city.tasks.api.utils.enums.EnumValidationError;
 import com.hiperium.city.tasks.api.vo.AuroraSecretsVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,19 +20,25 @@ public final class EnvironmentUtil {
     }
 
     public static AuroraSecretsVo getAuroraSecretVO() throws JsonProcessingException {
-        String auroraSecret = System.getenv("HIPERIUM_CITY_TASKS_DB_CLUSTER_SECRET");
+        String auroraSecret = System.getenv("CITY_TASKS_DB_CLUSTER_SECRET");
         if (Objects.isNull(auroraSecret) || auroraSecret.isBlank()) {
-            LOGGER.warn("HIPERIUM_CITY_TASKS_DB_CLUSTER_SECRET not found. Using defaults.");
-            return null;
+            throw new ApplicationException("Environment variable 'CITY_TASKS_DB_CLUSTER_SECRET' not found.");
         }
         return new ObjectMapper().readValue(auroraSecret, AuroraSecretsVo.class);
     }
 
+    public static String getIdpEndpoint() {
+        String idpEndpoint = System.getenv("CITY_IDP_ENDPOINT");
+        if (Objects.isNull(idpEndpoint) || idpEndpoint.isBlank()) {
+            throw new ApplicationException("Environment variable 'CITY_IDP_ENDPOINT' not found.");
+        }
+        return idpEndpoint;
+    }
+
     public static String getTimeZoneId() {
-        String timeZoneId = System.getenv("HIPERIUM_CITY_TASKS_TIME_ZONE_ID");
+        String timeZoneId = System.getenv("CITY_TASKS_TIME_ZONE_ID");
         if (Objects.isNull(timeZoneId) || timeZoneId.isBlank()) {
-            LOGGER.warn("HIPERIUM_CITY_TASKS_TIME_ZONE_ID not found. Using defaults.");
-            return null;
+            throw new ApplicationException("Environment variable 'CITY_TASKS_TIME_ZONE_ID' not found.");
         }
         return timeZoneId;
     }

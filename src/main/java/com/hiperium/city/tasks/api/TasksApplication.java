@@ -43,11 +43,10 @@ public class TasksApplication {
     }
 
     private static void setApplicationProperties() throws JsonProcessingException {
-        PropertiesLoaderUtil.settingJdbcConnection();
-        PropertiesLoaderUtil.settingDefaultTimeZone();
-        PropertiesLoaderUtil.settingAwsRegion();
-        PropertiesLoaderUtil.settingAwsAccessKey();
-        PropertiesLoaderUtil.settingAwsSecretKey();
-        PropertiesLoaderUtil.settingAwsEndpointOverride();
+        PropertiesLoaderUtil.setJdbcConnection();
+        PropertiesLoaderUtil.setIdpServiceEndpoint();
+        PropertiesLoaderUtil.setApplicationTimeZone();
+        PropertiesLoaderUtil.setAwsCredentials();
+        PropertiesLoaderUtil.setAwsEndpointOverride();
     }
 }

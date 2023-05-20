@@ -1,31 +1,50 @@
 package com.hiperium.city.tasks.api.common;
 
 import com.hiperium.city.tasks.api.utils.ContainersUtil;
+import dasniko.testcontainers.keycloak.KeycloakContainer;
+import org.junit.jupiter.api.BeforeAll;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.Objects;
 
-public class BaseContainers {
+public abstract class AbstractContainerBaseTest {
 
+    protected static final String AUTHORIZATION = "Authorization";
+
+    protected static KeycloakContainer KEYCLOAK_CONTAINER;
     protected static PostgreSQLContainer<?> POSTGRES_CONTAINER;
     protected static LocalStackContainer LOCALSTACK_CONTAINER;
-    protected static CompletableFuture<Void> baseContainers;
 
+    private static AccessTokenResponse accessTokenResponse;
+
+    // Singleton containers.
+    // See: https://www.testcontainers.org/test_framework_integration/manual_lifecycle_control/#singleton-containers
     static {
+        KEYCLOAK_CONTAINER = new KeycloakContainer()
+                .withRealmImportFile("keycloak-realm.json");
+        KEYCLOAK_CONTAINER.start();
         POSTGRES_CONTAINER = new PostgreSQLContainer<>("postgres:14.4")
                 .withUsername("postgres")
                 .withPassword("postgres123")
-                .withDatabaseName("HiperiumCityTasksDB");
+                .withDatabaseName("CityTasksDB");
+        POSTGRES_CONTAINER.start();
         LOCALSTACK_CONTAINER = new LocalStackContainer(DockerImageName.parse("localstack/localstack:latest"))
                 .withServices(LocalStackContainer.Service.DYNAMODB);
-        baseContainers = Startables.deepStart(POSTGRES_CONTAINER, LOCALSTACK_CONTAINER);
+        LOCALSTACK_CONTAINER.start();
     }
 
-    protected static void initStorageContainers(DynamicPropertyRegistry registry) {
+    @DynamicPropertySource
+    public static void dynamicPropertySource(DynamicPropertyRegistry registry) {
+        // SPRING SECURITY OAUTH2 JWT
+        registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri",
+                () -> KEYCLOAK_CONTAINER.getAuthServerUrl() + ContainersUtil.KEYCLOAK_REALM);
         // SPRING DATA JDBC CONNECTION
         registry.add("spring.datasource.url", POSTGRES_CONTAINER::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES_CONTAINER::getUsername);
@@ -49,5 +68,15 @@ public class BaseContainers {
         registry.add("aws.secretAccessKey", LOCALSTACK_CONTAINER::getSecretKey);
         registry.add("aws.endpoint-override",
                 () -> LOCALSTACK_CONTAINER.getEndpointOverride(LocalStackContainer.Service.DYNAMODB).toString());
+    }
+
+    @BeforeAll
+    public static void beforeAllTests() {
+        Keycloak keycloakClient = KEYCLOAK_CONTAINER.getKeycloakAdminClient();
+        accessTokenResponse = keycloakClient.tokenManager().getAccessToken();
+    }
+
+    protected String getBearerAccessToken() {
+        return "Bearer " + Objects.requireNonNull(accessTokenResponse).getToken();
     }
 }

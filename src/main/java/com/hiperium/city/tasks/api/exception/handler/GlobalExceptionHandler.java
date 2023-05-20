@@ -29,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final MessageSource messageSource;
 
-    @Value("${hiperium.city.tasks.time.zone.id}")
+    @Value("${city.tasks.time.zone.id}")
     private String zoneId;
 
     public GlobalExceptionHandler(MessageSource messageSource) {

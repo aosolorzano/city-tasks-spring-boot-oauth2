@@ -17,14 +17,13 @@ public class SecurityConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @Bean
-    SecurityWebFilterChain securityFilterChain(ServerHttpSecurity httpSecurity) {
-        LOGGER.info("securityFilterChain - START");
-        return httpSecurity
-                .csrf().disable()
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        LOGGER.info("springSecurityFilterChain - START");
+        http.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/actuator/**").permitAll()
                         .anyExchange().authenticated())
-                .oauth2ResourceServer(resourceServer -> resourceServer.jwt(withDefaults()))
-                .build();
+                .oauth2ResourceServer(resourceServer -> resourceServer.jwt(withDefaults()));
+        return http.build();
     }
 }

@@ -9,7 +9,7 @@ services:
     image: postgres:14.4
     container_name: tasks-postgres
     environment:
-      - POSTGRES_DB=HiperiumCityTasksDB
+      - POSTGRES_DB=CityTasksDB
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres123
     ports:
@@ -47,8 +47,9 @@ services:
       dockerfile: Dockerfile
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - HIPERIUM_CITY_TASKS_TIME_ZONE_ID=-05:00
-      - HIPERIUM_CITY_TASKS_DB_CLUSTER_SECRET={"dbClusterIdentifier":"hiperium-city-tasks-db-cluster","password":"postgres123","dbname":"HiperiumCityTasksDB","engine":"postgres","port":5432,"host":"tasks-postgres","username":"postgres"}
+      - CITY_TASKS_DB_CLUSTER_SECRET={"dbClusterIdentifier":"hiperium-city-tasks-db-cluster","password":"postgres123","dbname":"CityTasksDB","engine":"postgres","port":5432,"host":"tasks-postgres","username":"postgres"}
+      - CITY_IDP_ENDPOINT=https://cognito-idp.us-east-1.amazonaws.com/us-east-1_TyE3DeOjG
+      - CITY_TASKS_TIME_ZONE_ID=-05:00
       - AWS_DEFAULT_REGION=ap-southeast-2
       - AWS_ACCESS_KEY_ID=DUMMY
       - AWS_SECRET_ACCESS_KEY=DUMMY
