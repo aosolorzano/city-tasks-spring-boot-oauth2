@@ -5,7 +5,7 @@
 * **Level**: Advanced.
 * **Technologies**: Java 17, Spring Boot 3, Spring Native, Spring WebFlux, Spring OAuth2, Quartz, Flyway, Testcontainers, Postgres, DynamoDB and Docker Compose.
 
-**NOTE:** You can read the full article on [Medium](https://aosolorzano.medium.com/oauth2-in-spring-boot-native-reactive-microservice-with-amazon-cognito-as-oidc-service-c454d84a5234).
+You can read the full article on my [Medium Blog](https://aosolorzano.medium.com/oauth2-in-spring-boot-native-reactive-microservice-with-amazon-cognito-as-oidc-service-c454d84a5234) for more details.
 
 ## Description.
 This project uses the Spring Boot Framework to manage Quartz Jobs in a Spring Native microservice with the use of reactive programing using Spring WebFlux.
